@@ -3,26 +3,34 @@ Assignment 4 Part 1 - BST with arrays and pointers
 Author: Aagat Adhikari
 Course term: Fall 2026
 
-Folder contents
----------------
-A4_P1/
-  README.txt              this file
-  screenshot_BST_A.png    output of the array version running inst.txt
-  screenshot_BST_P.png    output of the pointer version running inst.txt
-  BST_A/                  array-based BST
-      bstA.h, bstA.cpp, mainA.cpp, queue.h, inst.txt
-  BST_P/                  pointer (linked) BST
-      bstP.h, bstP.cpp, mainP.cpp, queue.h, inst.txt
+Files (all in one folder)
+-------------------------
+Array-based BST (BST_A):
+  bstA.h, bstA.cpp      BST class stored in an array
+  mainA.cpp             reads commands from the input file and runs them
+  instA.txt             test input for the array version
+
+Pointer-based BST (BST_P):
+  bstP.h, bstP.cpp      BST class built from linked nodes
+  mainP.cpp             reads commands from the input file and runs them
+  instP.txt             test input for the pointer version
+
+Shared:
+  queue.h               custom linked-list queue used by BFS() in both versions
+  README.txt            this file
+  screenshot_BST_A_1.png, screenshot_BST_A_2.png   array version output (two parts)
+  screenshot_BST_P_1.png, screenshot_BST_P_2.png   pointer version output (two parts)
 
 How to compile and run
 ----------------------
-  cd BST_A
-  g++ -std=c++17 -Wall -o bstA mainA.cpp bstA.cpp
-  ./bstA inst.txt
+Compile each version on its own. Both have their own main() and their
+own BST class, so do not compile all the .cpp files together.
 
-  cd BST_P
+  g++ -std=c++17 -Wall -o bstA mainA.cpp bstA.cpp
+  ./bstA instA.txt          (Windows PowerShell: .\bstA instA.txt)
+
   g++ -std=c++17 -Wall -o bstP mainP.cpp bstP.cpp
-  ./bstP inst.txt
+  ./bstP instP.txt          (Windows PowerShell: .\bstP instP.txt)
 
 (queue.h is header-only, so it does not need to be listed on the g++ line.)
 
@@ -76,7 +84,7 @@ Duplicate insertions
   A BST stores unique keys, so insertNode (BST_P) and insertI / insertR
   (BST_A) now return false and do not insert when the value already
   exists. Previously, duplicates were sent to the right subtree.
-  main prints "Duplicate: x already in BST, not inserted".
+  The program prints "Duplicate: x already in BST, not inserted".
 
   The array insert functions also now report "No room" when a value
   would land beyond the end of the array. The base code dropped these
@@ -97,25 +105,25 @@ Task 4 - deleteNode() for BST_A
     3. Two children: copy the inorder successor (smallest value in the
        right subtree) into the slot, then delete the successor (which has
        no left child, so it is case 1 or 2).
-  deleteNode returns false (and main prints "not found") if the value is
-  not in the tree.
+  deleteNode returns false (and the program prints "not found") if the
+  value is not in the tree.
 
 Task 5 - BFS()
   Level-order traversal using the custom linked-list Queue in queue.h
-  (templated so it holds node* for BST_P and array indices for BST_A).
-  No STL queue is used. The root goes in the queue; each step dequeues a
-  node, prints it and enqueues its children. The output is printed one
-  level per line.
+  (one shared file, templated so it holds node* for BST_P and array
+  indices for BST_A). No STL queue is used. The root goes in the queue;
+  each step dequeues a node, prints it and enqueues its children. The
+  output is printed one level per line.
 
-Test input (inst.txt)
----------------------
-Both inst.txt files start with the original base-code inserts and then
+Test input (instA.txt and instP.txt)
+------------------------------------
+Both input files start with the original base-code inserts and then
 test every new feature: duplicates, height of the tree / of specific
 nodes / of a missing value, node count, BFS, and all three isBalanced
-results (Right-heavy, Left-heavy and Yes). For BST_A, inst.txt also
-deletes a leaf (40), a node with one child (0), nodes with two children
-(20, the root 7), a node with one child that carries a deep subtree (9),
-and a missing value (100).
+results (Right-heavy, Left-heavy and Yes). instA.txt also deletes a
+leaf (40), a node with one child (0), nodes with two children (20, the
+root 7), a node with one child that carries a deep subtree (9), and a
+missing value (100).
 
 Both versions were also checked with a randomized test of thousands of
 insert/delete sequences against std::set, built with AddressSanitizer:
